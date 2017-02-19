@@ -1,8 +1,9 @@
 import mysql.connector as con
+import configuration as cfg
 
 
 def verifyUser(name, pas):
-    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
     query = str("SELECT password FROM logingui where name like \'" + (name) + "\'")
@@ -40,7 +41,7 @@ def addEntry(name, string):
     if(string == ''):
         return False
 
-    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
     query = "INSERT INTO entries(creator,format) VALUES(%s,%s)"
@@ -64,7 +65,7 @@ def delEntry(name, string):
     if(string == ''):
         return False
 
-    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
     query = "DELETE FROM entries WHERE creator LIKE %s AND format LIKE %s"
@@ -86,7 +87,7 @@ def delEntry(name, string):
 
 
 def getStrings(name):
-    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
     query = str("SELECT format FROM entries WHERE creator LIKE \'" + (name) + "\'")
@@ -106,7 +107,7 @@ def getStrings(name):
 
 
 def getAdmins():
-    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
     query = str("SELECT DISTINCT name FROM logingui WHERE role LIKE '1'")
@@ -126,7 +127,7 @@ def getAdmins():
 
 
 def editEntry(name, ostr, nstr):
-    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
     query = "UPDATE entries SET format=%s WHERE creator LIKE %s AND format LIKE %s"

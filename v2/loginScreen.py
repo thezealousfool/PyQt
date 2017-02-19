@@ -11,7 +11,7 @@ class loginScreen(QDialog):
 
     def __init__(self):
         super(loginScreen, self).__init__()
-        self.initUi(800, 500, 20)
+        self.initUi(400, 350, 20)
 
     def initUi(self, winWidth, winHeight, winMargins):
 
