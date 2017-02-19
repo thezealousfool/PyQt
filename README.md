@@ -12,7 +12,9 @@ A demo project created to learn ***PyQt*** (Python wrapping of the famous Qt Lib
 	sudo apt-get install python mysql-server python-qt4 python-mysql.connector
 
 ## Configuration
+
 Edit the configuration.py file according to your mysql setup.
+
 |     Name     |   Role             |
 |:------------:|:-------------------|
 | user         |MySQL Username      |
@@ -25,6 +27,7 @@ Edit the configuration.py file according to your mysql setup.
 ## Table Specification
 
 ### Login Table
+
 | Field    | Type        |
 |:--------:|:------------|
 | name     | varchar(20) |
@@ -34,6 +37,7 @@ Edit the configuration.py file according to your mysql setup.
 NB: '**role**' field: 1 for admin, 2 for user, 3 for tester
 
 ### Entries Table
+
 | Field   | Type         |
 |:-------:|:-------------|
 | creator | varchar(20)  |
