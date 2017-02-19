@@ -1,15 +1,17 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-import sqlOperations
+import userScreen
 import adminScreen
+import testerScreen
+import sqlOperations
 
 
 class loginScreen(QDialog):
 
     def __init__(self):
         super(loginScreen, self).__init__()
-        self.initUi(400, 350, 20)
+        self.initUi(800, 500, 20)
 
     def initUi(self, winWidth, winHeight, winMargins):
 
@@ -88,6 +90,14 @@ class loginScreen(QDialog):
             self.close()
             name = str(self.idField.text())
             self.screen = adminScreen.adminScreen(name, name + ' | Add Field')
+        elif(status == 2):
+            self.close()
+            name = str(self.idField.text())
+            self.screen = userScreen.userScreen(name, name + " | Analyse")
+        elif(status == 3):
+            self.close()
+            name = str(self.idField.text())
+            self.screen = testerScreen.testerScreen(name, name + ' | Testing')
 
     def cancelClick(self):
         self.close()

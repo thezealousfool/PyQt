@@ -76,7 +76,70 @@ def delEntry(name, string):
     try:
         cursor.execute(query, args)
         cnx.commit()
-    except:
+    except Exception as e:
+        print e
+        success = False
+    finally:
+        cursor.close()
+        cnx.close()
+        return success
+
+
+def getStrings(name):
+    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cursor = cnx.cursor()
+
+    query = str("SELECT format FROM entries WHERE creator LIKE \'" + (name) + "\'")
+
+    cursor.execute(query)
+
+    result = []
+    for row in cursor:
+        result.append(row[0])
+
+    cnx.commit()
+
+    cursor.close()
+    cnx.close()
+
+    return result
+
+
+def getAdmins():
+    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cursor = cnx.cursor()
+
+    query = str("SELECT DISTINCT name FROM logingui WHERE role LIKE '1'")
+
+    cursor.execute(query)
+
+    result = []
+    for row in cursor:
+        result.append(row[0])
+
+    cnx.commit()
+
+    cursor.close()
+    cnx.close()
+
+    return result
+
+
+def editEntry(name, ostr, nstr):
+    cnx = con.connect(user='root', password='vivek', host='localhost', database='login')
+    cursor = cnx.cursor()
+
+    query = "UPDATE entries SET format=%s WHERE creator LIKE %s AND format LIKE %s"
+
+    args = (nstr, name, ostr)
+
+    success = True
+
+    try:
+        cursor.execute(query, args)
+        cnx.commit()
+    except Exception as e:
+        print e
         success = False
     finally:
         cursor.close()

@@ -1,10 +1,10 @@
 import sys
 from PyQt4.QtGui import *
 
-import adminScreen
+import userScreen
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    name = 'vivek'
-    screen = adminScreen.adminScreen(name, name + ' | Add Field')
+    name = 'tester'
+    screen = userScreen.userScreen(name, name + ' | Analyse')
     sys.exit(app.exec_())

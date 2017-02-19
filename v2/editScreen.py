@@ -1,15 +1,15 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-import loginScreen
-import manageScreen
 import sqlOperations
 
 
-class adminScreen(QDialog):
+class editScreen(QDialog):
 
-    def __init__(self, userName, title):
-        super(adminScreen, self).__init__()
+    def __init__(self, userName, title, oldStr, parent):
+        super(editScreen, self).__init__()
+        self.parent = parent
+        self.oldStr = oldStr
         self.userName = userName
         self.initUi(400, 350, 20)
         self.setWindowTitle(title)
@@ -27,12 +27,6 @@ class adminScreen(QDialog):
 
         clearButton = QPushButton('Clear')
         clearButton.clicked.connect(self.clearClick)
-
-        logoutButton = QPushButton('Logout')
-        logoutButton.clicked.connect(self.logoutClick)
-
-        manageButton = QPushButton('Manage')
-        manageButton.clicked.connect(self.manageClick)
 
         date = QPushButton('Date')
         date.clicked.connect(self.dateClick)
@@ -58,20 +52,18 @@ class adminScreen(QDialog):
         rVLayout = QVBoxLayout()
         rVLayout.setMargin(winMargins)
 
-        welcomeLabel = QLabel('Welcome, ' + self.userName)
-
-        userButtonGroup = QVBoxLayout()
-        userButtonGroup.addWidget(manageButton)
-        userButtonGroup.addWidget(logoutButton)
-
-        userLogout = QHBoxLayout()
-        userLogout.addWidget(welcomeLabel)
-        userLogout.addStretch(1)
-        userLogout.addLayout(userButtonGroup)
-
-        formattedStringGroup = QGroupBox('Formatted String')
+        oldStringGroup = QGroupBox('Old String')
+        newStringGroup = QGroupBox('New String')
 
         fStrVLayout = QVBoxLayout()
+        oStrVLayout = QVBoxLayout()
+
+        self.oString = QTextEdit(self.oldStr)
+        self.oString.setReadOnly(True)
+
+        oStrVLayout.addWidget(self.oString)
+
+        oldStringGroup.setLayout(oStrVLayout)
 
         self.fmtString = QTextEdit()
         self.fmtString.setReadOnly(True)
@@ -85,16 +77,15 @@ class adminScreen(QDialog):
         fStrVLayout.addWidget(self.fmtString)
         fStrVLayout.addLayout(fStrBtnHLayout)
 
-        formattedStringGroup.setLayout(fStrVLayout)
+        newStringGroup.setLayout(fStrVLayout)
 
         submitButtonLayout = QHBoxLayout()
 
         submitButtonLayout.addStretch(1)
         submitButtonLayout.addWidget(submitButton)
 
-        rVLayout.addLayout(userLogout)
-        rVLayout.addStretch(1)
-        rVLayout.addWidget(formattedStringGroup)
+        rVLayout.addWidget(oldStringGroup)
+        rVLayout.addWidget(newStringGroup)
         rVLayout.addStretch(1)
         rVLayout.addLayout(submitButtonLayout)
 
@@ -127,13 +118,6 @@ class adminScreen(QDialog):
 
         self.show()
 
-    def logoutClick(self):
-        self.close()
-        self.screen = loginScreen.loginScreen()
-
-    def manageClick(self):
-        self.screen2 = manageScreen.manageScreen(self.userName, self.userName + ' | Manage')
-
     def clearClick(self):
         self.fmtString.clear()
 
@@ -144,7 +128,11 @@ class adminScreen(QDialog):
         self.fmtString.setText(fmt)
 
     def submitClick(self):
-        if(sqlOperations.addEntry(self.userName, str(self.fmtString.toPlainText()))):
+        if(sqlOperations.editEntry(self.userName,
+           str(self.oString.toPlainText()),
+           str(self.fmtString.toPlainText()))):
+            self.parent.listWidget.clear()
+            self.parent.populateList()
             msgBox = QMessageBox()
             msgBox.setText('Successful')
             msgBox.setInformativeText('Entry successfully added to database')
