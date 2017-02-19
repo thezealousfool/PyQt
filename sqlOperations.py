@@ -6,7 +6,7 @@ def verifyUser(name, pas):
     cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
-    query = str("SELECT password FROM logingui where name like \'" + (name) + "\'")
+    query = str("SELECT password FROM " + cfg.logintable + " where name like \'" + (name) + "\'")
 
     cursor.execute(query)
     empty = cursor.rowcount == 0
@@ -24,7 +24,7 @@ def verifyUser(name, pas):
     if(empty or pas != passwd):
         return -1
     else:
-        query = str("SELECT role FROM logingui where name like \'" + (name) + "\'")
+        query = str("SELECT role FROM " + cfg.logintable + " where name like \'" + name + "\'")
         role = -1
         cursor.execute(query)
         for n in cursor:
@@ -44,7 +44,7 @@ def addEntry(name, string):
     cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
-    query = "INSERT INTO entries(creator,format) VALUES(%s,%s)"
+    query = "INSERT INTO " + cfg.entriestable + "(creator,format) VALUES(%s,%s)"
 
     args = (name, string)
 
@@ -68,7 +68,7 @@ def delEntry(name, string):
     cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
-    query = "DELETE FROM entries WHERE creator LIKE %s AND format LIKE %s"
+    query = "DELETE FROM " + cfg.entriestable + " WHERE creator LIKE %s AND format LIKE %s"
 
     args = (name, string)
 
@@ -90,7 +90,7 @@ def getStrings(name):
     cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
-    query = str("SELECT format FROM entries WHERE creator LIKE \'" + (name) + "\'")
+    query = str("SELECT format FROM " + cfg.entriestable + " WHERE creator LIKE \'" + name + "\'")
 
     cursor.execute(query)
 
@@ -110,7 +110,7 @@ def getAdmins():
     cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
-    query = str("SELECT DISTINCT name FROM logingui WHERE role LIKE '1'")
+    query = str("SELECT DISTINCT name FROM " + cfg.logintable + " WHERE role LIKE '1'")
 
     cursor.execute(query)
 
@@ -130,7 +130,7 @@ def editEntry(name, ostr, nstr):
     cnx = con.connect(user=cfg.user, password=cfg.password, host=cfg.host, database=cfg.database)
     cursor = cnx.cursor()
 
-    query = "UPDATE entries SET format=%s WHERE creator LIKE %s AND format LIKE %s"
+    query = "UPDATE " + cfg.entriestable + " SET format=%s WHERE creator LIKE %s AND format LIKE %s"
 
     args = (nstr, name, ostr)
 
